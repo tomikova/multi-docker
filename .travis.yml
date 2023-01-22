@@ -12,10 +12,10 @@ script:
   - docker run -e CI=true xxmadmanxx/react-test npm test
 
 after_success:
-  - docker build -t xxmadmanxx/multi-client --platform "linux/amd64" --paltform "linux/arm64/v8" ./client
-  - docker build -t xxmadmanxx/multi-nginx --platform "linux/amd64" --paltform "linux/arm64/v8" ./nginx
-  - docker build -t xxmadmanxx/multi-server --platform "linux/amd64" --paltform "linux/arm64/v8" ./server
-  - docker build -t xxmadmanxx/multi-worker --platform "linux/amd64" --paltform "linux/arm64/v8" ./worker
+  - docker buildx build -t xxmadmanxx/multi-client --platform "linux/amd64" --paltform "linux/arm64/v8" ./client
+  - docker buildx build -t xxmadmanxx/multi-nginx --platform "linux/amd64" --paltform "linux/arm64/v8" ./nginx
+  - docker buildx build -t xxmadmanxx/multi-server --platform "linux/amd64" --paltform "linux/arm64/v8" ./server
+  - docker buildx build -t xxmadmanxx/multi-worker --platform "linux/amd64" --paltform "linux/arm64/v8" ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
