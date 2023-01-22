@@ -4,18 +4,15 @@ services:
 
 before_install:
   - docker build -t xxmadmanxx/react-test -f ./client/Dockerfile.dev ./client
-  - mkdir -vp ~/.docker/cli-plugins/
-  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.3.0/buildx-v0.3.0.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
-  - chmod a+x ~/.docker/cli-plugins/docker-buildx
 
 script:
   - docker run -e CI=true xxmadmanxx/react-test npm test
 
 after_success:
-  - docker buildx build -t xxmadmanxx/multi-client --platform "linux/amd64" --paltform "linux/arm64/v8" ./client
-  - docker buildx build -t xxmadmanxx/multi-nginx --platform "linux/amd64" --paltform "linux/arm64/v8" ./nginx
-  - docker buildx build -t xxmadmanxx/multi-server --platform "linux/amd64" --paltform "linux/arm64/v8" ./server
-  - docker buildx build -t xxmadmanxx/multi-worker --platform "linux/amd64" --paltform "linux/arm64/v8" ./worker
+  - docker build -t xxmadmanxx/multi-client --platform "linux/amd64" --platform "linux/arm64/v8" ./client
+  - docker build -t xxmadmanxx/multi-nginx --platform "linux/amd64" --platform "linux/arm64/v8" ./nginx
+  - docker build -t xxmadmanxx/multi-server --platform "linux/amd64" --platform "linux/arm64/v8" ./server
+  - docker build -t xxmadmanxx/multi-worker --platform "linux/amd64" --platform "linux/arm64/v8" ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
